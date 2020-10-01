@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "526576850456",
+    "firebase_url": "https://shrtcaro.firebaseio.com",
+    "project_id": "shrtcaro",
+    "storage_bucket": "shrtcaro.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:526576850456:android:5eec6a6d0cabf98c2e556d",
+        "android_client_info": {
+          "package_name": "com.example.caro"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "526576850456-i57kuvjpdehk2piq273cga4911slr10l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDeSsveOMEzcf9LWshQHnFxjGOmpJkq8aY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "526576850456-i57kuvjpdehk2piq273cga4911slr10l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
