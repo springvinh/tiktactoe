@@ -116,7 +116,6 @@ class _GameBoardState extends State<GameBoard> {
                               child: Container(
                                 margin: EdgeInsets.all(1.0),
                                 color: Color.fromARGB(10, 0, 0, 0),
-                                // color: cells[index]['state'] == 0 ? Color.fromARGB(10, 0, 0, 0) : cells[index]['state'] == 1 ? Colors.red : Colors.blue,
                                 child: Center(
                                   child: cells[index]['state'] == 0 ? null : cells[index]['state'] == 1 ? Text('X', style: TextStyle(color: Colors.red),) : Text('O', style: TextStyle(color: Colors.blue)),
                                 ),
