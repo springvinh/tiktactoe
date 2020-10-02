@@ -40,36 +40,17 @@ class GameController extends GetxController {
     if (roomData['gameboard'][index]['state'] == 0 &&
         roomData['isPlaying'] == true) {
       if (roomData['switchTurn'] % 2 == 0) {
-        // database
-        //     .child('Room/$roomId/')
-        //     .update({'switchTurn': roomData['switchTurn'] + 1});
-        // database.child('Room/$roomId/gameboard/$index/').update({'state': 1});
-
-
-
-        database.child('Room/$roomId/').update({
-          'switchTurn': roomData['switchTurn'] + 1,
-          'gameboard': {
-            '$index': {
-              'state': 1
-            }
-          }
+        
+        database.child('Room/$roomId/').update({'switchTurn': roomData['switchTurn'] + 1}).then((value) => {
+          database.child('Room/$roomId/gameboard/$index/').update({'state': 1})
         });
+
       } else {
 
-        database.child('Room/$roomId/').update({
-          'switchTurn': roomData['switchTurn'] + 1,
-          // 'gameboard': {
-          //   '$index': {
-          //     'state': 2
-          //   }
-          // }
+        database.child('Room/$roomId/').update({'switchTurn': roomData['switchTurn'] + 1}).then((value) => {
+          database.child('Room/$roomId/gameboard/$index/').update({'state': 2})
         });
 
-        // database
-        //     .child('Room/$roomId/')
-        //     .update({'switchTurn': roomData['switchTurn'] + 1});
-        // database.child('Room/$roomId/gameboard/$index/').update({'state': 2});
       }
     }
   }
