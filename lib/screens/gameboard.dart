@@ -32,6 +32,8 @@ class _GameBoardState extends State<GameBoard> {
 
   Widget build(BuildContext context) {
 
+    int as;
+
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
 
