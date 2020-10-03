@@ -38,14 +38,18 @@ class GameController extends GetxController {
   }
 
   void updateCellState(Map<dynamic, dynamic> roomData, int index) {
+
     if (roomData['gameboard'][index]['state'] == 0 &&
         roomData['isPlaying'] == true) {
+        
       if (roomData['switchTurn'] % 2 == 0) {
         
         database.child('Room/$roomId/').update({'switchTurn': roomData['switchTurn'] + 1}).then((value) => {
           database.child('Room/$roomId/gameboard/$index/').update({'state': 1}).then((value) => {
             columnCheck(roomData, index, roomData['gameboard'][index]['column'], roomData['gameboard'][index]['row'], 1),
-            rowCheck(roomData, index, roomData['gameboard'][index]['column'], roomData['gameboard'][index]['row'], 1)
+            rowCheck(roomData, index, roomData['gameboard'][index]['column'], roomData['gameboard'][index]['row'], 1),
+            topLeftToBottomRightCheck(roomData, index, 1),
+            bottomLeftToTopRightCheck(roomData, index, 1)
           })
         });
 
@@ -54,7 +58,9 @@ class GameController extends GetxController {
         database.child('Room/$roomId/').update({'switchTurn': roomData['switchTurn'] + 1}).then((value) => {
           database.child('Room/$roomId/gameboard/$index/').update({'state': 2}).then((value) => {
             columnCheck(roomData, index, roomData['gameboard'][index]['column'], roomData['gameboard'][index]['row'], 2),
-            rowCheck(roomData, index, roomData['gameboard'][index]['column'], roomData['gameboard'][index]['row'], 2)
+            rowCheck(roomData, index, roomData['gameboard'][index]['column'], roomData['gameboard'][index]['row'], 2),
+            topLeftToBottomRightCheck(roomData, index, 2),
+            bottomLeftToTopRightCheck(roomData, index, 2)
           })
         });
 
@@ -156,6 +162,101 @@ class GameController extends GetxController {
       startIndex = startIndex + 20;
 
     }
+
+
+  }
+
+  void topLeftToBottomRightCheck(Map<dynamic, dynamic> roomData, int index, int value) {
+
+    List<int> indexList = [];
+    int startIndex = index;
+    int endIndex = index;
+    int count = 0;
+
+    indexList.add(startIndex);
+
+    for(int i = 0; i < 4; i++) {
+
+      if((startIndex / 20).floor() == 0 || (startIndex % 20) == 0) break;
+
+      startIndex = startIndex - 21;
+      indexList.add(startIndex);
+
+      if((startIndex % 20) == 0 || (startIndex / 20).floor() == 0) break;
+
+    }
+
+    for(int i = 0; i < 4; i++) {
+
+      if((endIndex % 20) == 19 || (endIndex / 20).floor() == 19) break;
+
+      endIndex = endIndex + 21;
+      indexList.add(endIndex);
+
+      if((endIndex % 20) == 19 || (endIndex / 20).floor() == 19) break;
+
+    }
+
+    indexList.sort();
+    
+    indexList.forEach((val) {
+
+      roomData['gameboard'][val]['state'] == value ? count++ : count = 0;
+
+      if(count == 4) database.child('Room/$roomId/player/player$value/').update({
+        'score': roomData['player']['player$value']['score'] + 1
+      });
+
+    });
+
+
+
+  }
+  
+
+  void bottomLeftToTopRightCheck(Map<dynamic, dynamic> roomData, int index, int value) {
+
+    List<int> indexList = [];
+    int startIndex = index;
+    int endIndex = index;
+    int count = 0;
+
+    indexList.add(startIndex);
+
+    for(int i = 0; i < 4; i++) {
+
+      if((endIndex % 20) == 0 || (startIndex / 20).floor() == 19) break;
+
+      endIndex = endIndex + 19;
+      indexList.add(endIndex);
+
+      if((endIndex % 20) == 19 || (endIndex / 20).floor() == 19) break;
+
+    }
+
+    for(int i = 0; i < 4; i++) {
+      
+      if((startIndex / 20).floor() == 0 || (startIndex % 20) == 19) break;
+
+      startIndex = startIndex - 19;
+      indexList.add(startIndex);
+
+      if((startIndex % 20) == 0 || (startIndex / 20).floor() == 0) break;
+
+    }
+
+    indexList.sort();
+    
+    indexList.forEach((val) {
+
+      roomData['gameboard'][val]['state'] == value ? count++ : count = 0;
+
+      if(count == 4) database.child('Room/$roomId/player/player$value/').update({
+        'score': roomData['player']['player$value']['score'] + 1
+      });
+
+    });
+
 
 
   }

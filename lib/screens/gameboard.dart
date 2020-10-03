@@ -51,6 +51,7 @@ class _GameBoardState extends State<GameBoard> {
           children: [
             Container(
               padding: EdgeInsets.only(left: 24.0, right: 24.0, top: 24.0, bottom: 24.0),
+              color: Colors.white,
               child: StreamBuilder(
                 stream: Get.find<GameController>().database.child('Room/$roomId/player').onValue,
                 builder: (context, snapshot) {
