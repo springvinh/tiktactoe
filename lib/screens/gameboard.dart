@@ -134,6 +134,7 @@ class _GameBoardState extends State<GameBoard> {
                                 margin: EdgeInsets.all(1.0),
                                 color: Color.fromARGB(10, 0, 0, 0),
                                 child: Center(
+                                  // child: cells[index]['state'] == 0 ? null : cells[index]['state'] == 1 ? Text('$index', style: TextStyle(color: Colors.red),) : Text('$index', style: TextStyle(color: Colors.blue),),
                                   child: cells[index]['state'] == 0 ? null : cells[index]['state'] == 1 ? Image.asset('assets/images/icons8-multiply-96.png', scale: 4.0,) : Image.asset('assets/images/icons8-circle-96.png', scale: 4.0,),
                                 ),
                               ),
