@@ -27,14 +27,33 @@ class GameController extends GetxController {
           'player2': {'score': 0},
         },
         'gameboard': cells,
-        'switchTurn': 0,
-        'playerTurn': uid,
-        'isPlaying': true
+        'switchTurn': 0
       });
     } catch (error) {
       Get.back();
       showSnackBar(error.message);
     }
+  }
+
+  void joinGame(String uid, String username, int joinId) async {
+
+    try {
+
+      database.child('Room/$joinId/player/player2').update({
+        'uid': uid,
+        'username': username,
+        'score': 0
+      }).then((value) => {
+        database.child('Room/$joinId').update({
+          'isPlaying': true
+        })
+      });
+
+    } catch(error) {
+      Get.back();
+      showSnackBar(error.message);
+    }
+
   }
 
   void updateCellState(Map<dynamic, dynamic> roomData, int index) {

@@ -1,10 +1,16 @@
 import 'package:caro/controllers/AuthController.dart';
 import 'package:caro/models/UserModel.dart';
 import 'package:caro/screens/gameboard.dart';
+import 'package:caro/screens/joinGameboard.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class Home extends GetWidget<AuthController> {
+
+  TextEditingController roomIdController = TextEditingController();
+
+  final database = FirebaseDatabase.instance.reference();
 
   UserModel userModel;
 
@@ -36,7 +42,7 @@ class Home extends GetWidget<AuthController> {
                   height: 50.0,
                   color: Color(0xfff5f5f5),
                   child: TextField(
-                    // controller: emailController,
+                    controller: roomIdController,
                     keyboardType: TextInputType.number,
                     style: TextStyle(
                       fontWeight: FontWeight.bold
@@ -49,7 +55,17 @@ class Home extends GetWidget<AuthController> {
                           borderRadius: BorderRadius.circular(100.0),
                           child: InkWell(
                             child: Icon(Icons.arrow_forward),
-                            onTap: () {},
+                            onTap: () async {
+                              int roomId;
+
+                              roomIdController.text == '' ? roomId = 89374958734 : roomId = int.parse(roomIdController.text);
+                              print(roomId);
+                              
+                              await database.child('Room/$roomId').once().then((value) => {
+                                value.value == null ? showSnackBar('Room does not exist') : Get.to(JoinGameBoard(uid: userModel.uid, username: userModel.username, roomId: int.parse(roomIdController.text)))
+                              });
+          
+                            },
                           )
                         ),
                       ),
