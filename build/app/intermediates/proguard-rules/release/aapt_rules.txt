@@ -1,0 +1,18 @@
+# Referenced at D:\GitHub\tiktactoe\build\app\intermediates\merged_manifests\release\AndroidManifest.xml:16
+-keep class androidx.core.app.CoreComponentFactory { <init>(); }
+# Referenced at D:\GitHub\tiktactoe\build\app\intermediates\merged_manifests\release\AndroidManifest.xml:20
+-keep class com.example.caro.MainActivity { <init>(); }
+# Referenced at D:\GitHub\tiktactoe\build\app\intermediates\merged_manifests\release\AndroidManifest.xml:119
+-keep class com.google.android.gms.common.api.GoogleApiActivity { <init>(); }
+# Referenced at D:\GitHub\tiktactoe\build\app\intermediates\merged_manifests\release\AndroidManifest.xml:99
+-keep class com.google.android.gms.measurement.AppMeasurementJobService { <init>(); }
+# Referenced at D:\GitHub\tiktactoe\build\app\intermediates\merged_manifests\release\AndroidManifest.xml:89
+-keep class com.google.android.gms.measurement.AppMeasurementReceiver { <init>(); }
+# Referenced at D:\GitHub\tiktactoe\build\app\intermediates\merged_manifests\release\AndroidManifest.xml:95
+-keep class com.google.android.gms.measurement.AppMeasurementService { <init>(); }
+# Referenced at D:\GitHub\tiktactoe\build\app\intermediates\merged_manifests\release\AndroidManifest.xml:105
+-keep class com.google.firebase.auth.internal.FederatedSignInActivity { <init>(); }
+# Referenced at D:\GitHub\tiktactoe\build\app\intermediates\merged_manifests\release\AndroidManifest.xml:62
+-keep class com.google.firebase.components.ComponentDiscoveryService { <init>(); }
+# Referenced at D:\GitHub\tiktactoe\build\app\intermediates\merged_manifests\release\AndroidManifest.xml:113
+-keep class com.google.firebase.provider.FirebaseInitProvider { <init>(); }

@@ -27,6 +27,7 @@ class GameController extends GetxController {
           'player2': {'score': 0},
         },
         'gameboard': cells,
+        'playerTurn': uid,
         'switchTurn': 0
       });
     } catch (error) {
@@ -56,34 +57,43 @@ class GameController extends GetxController {
 
   }
 
-  void updateCellState(Map<dynamic, dynamic> roomData, int index) {
+  void updateCellState(Map<dynamic, dynamic> roomData, int index, int roomId, String uid) {
 
     if (roomData['gameboard'][index]['state'] == 0 &&
         roomData['isPlaying'] == true) {
+
+      if(roomData['playerTurn'] == uid) {
+
+        if (roomData['switchTurn'] % 2 == 0) {
         
-      if (roomData['switchTurn'] % 2 == 0) {
-        
-        database.child('Room/$roomId/').update({'switchTurn': roomData['switchTurn'] + 1}).then((value) => {
-          database.child('Room/$roomId/gameboard/$index/').update({'state': 1}).then((value) => {
-            columnCheck(roomData, index, roomData['gameboard'][index]['column'], roomData['gameboard'][index]['row'], 1),
-            rowCheck(roomData, index, roomData['gameboard'][index]['column'], roomData['gameboard'][index]['row'], 1),
-            topLeftToBottomRightCheck(roomData, index, 1),
-            bottomLeftToTopRightCheck(roomData, index, 1)
-          })
-        });
+          database.child('Room/$roomId/').update({'switchTurn': roomData['switchTurn'] + 1, 'playerTurn': roomData['player']['player2']['uid']}).then((value) => {
+            database.child('Room/$roomId/gameboard/$index/').update({'state': 1}).then((value) => {
+              columnCheck(roomData, index, roomData['gameboard'][index]['column'], roomData['gameboard'][index]['row'], 1),
+              rowCheck(roomData, index, roomData['gameboard'][index]['column'], roomData['gameboard'][index]['row'], 1),
+              topLeftToBottomRightCheck(roomData, index, 1),
+              bottomLeftToTopRightCheck(roomData, index, 1)
+            })
+          });
+
+        } else {
+
+          database.child('Room/$roomId/').update({'switchTurn': roomData['switchTurn'] + 1, 'playerTurn': roomData['player']['player1']['uid']}).then((value) => {
+            database.child('Room/$roomId/gameboard/$index/').update({'state': 2}).then((value) => {
+              columnCheck(roomData, index, roomData['gameboard'][index]['column'], roomData['gameboard'][index]['row'], 2),
+              rowCheck(roomData, index, roomData['gameboard'][index]['column'], roomData['gameboard'][index]['row'], 2),
+              topLeftToBottomRightCheck(roomData, index, 2),
+              bottomLeftToTopRightCheck(roomData, index, 2)
+            })
+          });
+
+        }
 
       } else {
 
-        database.child('Room/$roomId/').update({'switchTurn': roomData['switchTurn'] + 1}).then((value) => {
-          database.child('Room/$roomId/gameboard/$index/').update({'state': 2}).then((value) => {
-            columnCheck(roomData, index, roomData['gameboard'][index]['column'], roomData['gameboard'][index]['row'], 2),
-            rowCheck(roomData, index, roomData['gameboard'][index]['column'], roomData['gameboard'][index]['row'], 2),
-            topLeftToBottomRightCheck(roomData, index, 2),
-            bottomLeftToTopRightCheck(roomData, index, 2)
-          })
-        });
+        showSnackBar('errorMessage');
 
       }
+        
 
       print(roomData['gameboard'][index]['column'].toString() + ' ' + roomData['gameboard'][index]['row'].toString() + ' ' + index.toString());
     }

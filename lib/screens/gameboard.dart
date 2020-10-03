@@ -125,7 +125,7 @@ class _GameBoardState extends State<GameBoard> {
                             return InkWell(
                               onTap: () async {
 
-                                Get.find<GameController>().updateCellState(roomData, index);
+                                Get.find<GameController>().updateCellState(roomData, index, roomId, widget.uid);
                                 
                               },
                               child: Container(

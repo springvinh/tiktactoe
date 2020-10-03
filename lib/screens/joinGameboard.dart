@@ -36,7 +36,7 @@ class _JoinGameBoardState extends State<JoinGameBoard> {
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.black),
         backgroundColor: Colors.white,
-        title: Text('$widget.roomId', style: TextStyle(color: Colors.black),),
+        title: Text('${widget.roomId}', style: TextStyle(color: Colors.black),),
         centerTitle: true,
         elevation: 0.0,
       ),
@@ -47,7 +47,7 @@ class _JoinGameBoardState extends State<JoinGameBoard> {
               padding: EdgeInsets.only(left: 24.0, right: 24.0, top: 24.0, bottom: 24.0),
               color: Colors.white,
               child: StreamBuilder(
-                stream: Get.find<GameController>().database.child('Room/$widget.roomId/player').onValue,
+                stream: Get.find<GameController>().database.child('Room/${widget.roomId}/player').onValue,
                 builder: (context, snapshot) {
 
                   if(!snapshot.hasData) {
@@ -102,7 +102,7 @@ class _JoinGameBoardState extends State<JoinGameBoard> {
                       overscroll.disallowGlow();
                     },
                     child: StreamBuilder(
-                      stream: Get.find<GameController>().database.child('Room/$widget.roomId').onValue,
+                      stream: Get.find<GameController>().database.child('Room/${widget.roomId}').onValue,
                       builder: (context, snapshot) {
 
                         if(!snapshot.hasData) {
@@ -122,7 +122,7 @@ class _JoinGameBoardState extends State<JoinGameBoard> {
                             return InkWell(
                               onTap: () async {
 
-                                Get.find<GameController>().updateCellState(roomData, index);
+                                Get.find<GameController>().updateCellState(roomData, index, widget.roomId, widget.uid);
                                 
                               },
                               child: Container(
