@@ -28,7 +28,8 @@ class GameController extends GetxController {
         },
         'gameboard': cells,
         'playerTurn': uid,
-        'switchTurn': 0
+        'switchTurn': 0,
+        'isPlaying': false
       });
     } catch (error) {
       Get.back();
@@ -42,8 +43,7 @@ class GameController extends GetxController {
 
       database.child('Room/$joinId/player/player2').update({
         'uid': uid,
-        'username': username,
-        'score': 0
+        'username': username
       }).then((value) => {
         database.child('Room/$joinId').update({
           'isPlaying': true
@@ -68,10 +68,10 @@ class GameController extends GetxController {
         
           database.child('Room/$roomId/').update({'switchTurn': roomData['switchTurn'] + 1, 'playerTurn': roomData['player']['player2']['uid']}).then((value) => {
             database.child('Room/$roomId/gameboard/$index/').update({'state': 1}).then((value) => {
-              columnCheck(roomData, index, roomData['gameboard'][index]['column'], roomData['gameboard'][index]['row'], 1),
-              rowCheck(roomData, index, roomData['gameboard'][index]['column'], roomData['gameboard'][index]['row'], 1),
-              topLeftToBottomRightCheck(roomData, index, 1),
-              bottomLeftToTopRightCheck(roomData, index, 1)
+              columnCheck(roomData, roomId, index, roomData['gameboard'][index]['column'], roomData['gameboard'][index]['row'], 1),
+              rowCheck(roomData, roomId, index, roomData['gameboard'][index]['column'], roomData['gameboard'][index]['row'], 1),
+              topLeftToBottomRightCheck(roomData, roomId, index, 1),
+              bottomLeftToTopRightCheck(roomData, roomId, index, 1)
             })
           });
 
@@ -79,10 +79,10 @@ class GameController extends GetxController {
 
           database.child('Room/$roomId/').update({'switchTurn': roomData['switchTurn'] + 1, 'playerTurn': roomData['player']['player1']['uid']}).then((value) => {
             database.child('Room/$roomId/gameboard/$index/').update({'state': 2}).then((value) => {
-              columnCheck(roomData, index, roomData['gameboard'][index]['column'], roomData['gameboard'][index]['row'], 2),
-              rowCheck(roomData, index, roomData['gameboard'][index]['column'], roomData['gameboard'][index]['row'], 2),
-              topLeftToBottomRightCheck(roomData, index, 2),
-              bottomLeftToTopRightCheck(roomData, index, 2)
+              columnCheck(roomData, roomId, index, roomData['gameboard'][index]['column'], roomData['gameboard'][index]['row'], 2),
+              rowCheck(roomData, roomId, index, roomData['gameboard'][index]['column'], roomData['gameboard'][index]['row'], 2),
+              topLeftToBottomRightCheck(roomData, roomId, index, 2),
+              bottomLeftToTopRightCheck(roomData, roomId, index, 2)
             })
           });
 
@@ -95,12 +95,12 @@ class GameController extends GetxController {
       }
         
 
-      print(roomData['gameboard'][index]['column'].toString() + ' ' + roomData['gameboard'][index]['row'].toString() + ' ' + index.toString());
+      // print(roomData['gameboard'][index]['column'].toString() + ' ' + roomData['gameboard'][index]['row'].toString() + ' ' + index.toString());
     }
   }
 
 
-  void columnCheck(Map<dynamic, dynamic> roomData, int index, int column, int row, int value) {
+  void columnCheck(Map<dynamic, dynamic> roomData, int roomId, int index, int column, int row, int value) {
     
     int start = row;
     int end = row;
@@ -146,7 +146,7 @@ class GameController extends GetxController {
   }
 
 
-  void rowCheck(Map<dynamic, dynamic> roomData, int index, int column, int row, int value) {
+  void rowCheck(Map<dynamic, dynamic> roomData, int roomId, int index, int column, int row, int value) {
     
     int start = column;
     int end = column;
@@ -195,7 +195,7 @@ class GameController extends GetxController {
 
   }
 
-  void topLeftToBottomRightCheck(Map<dynamic, dynamic> roomData, int index, int value) {
+  void topLeftToBottomRightCheck(Map<dynamic, dynamic> roomData, int roomId, int index, int value) {
 
     List<int> indexList = [];
     int startIndex = index;
@@ -243,7 +243,7 @@ class GameController extends GetxController {
   }
   
 
-  void bottomLeftToTopRightCheck(Map<dynamic, dynamic> roomData, int index, int value) {
+  void bottomLeftToTopRightCheck(Map<dynamic, dynamic> roomData, int roomId, int index, int value) {
 
     List<int> indexList = [];
     int startIndex = index;
