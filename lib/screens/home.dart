@@ -18,6 +18,7 @@ class Home extends GetWidget<AuthController> {
   
   @override
   Widget build(BuildContext context) {
+
     // TODO: implement build
     return Scaffold(
       body: SafeArea(
@@ -62,7 +63,13 @@ class Home extends GetWidget<AuthController> {
                               print(roomId);
                               
                               await database.child('Room/$roomId').once().then((value) => {
-                                value.value == null ? showSnackBar('Room does not exist') : Get.to(JoinGameBoard(uid: userModel.uid, username: userModel.username, roomId: int.parse(roomIdController.text)))
+                                
+                                value.value == null ? 
+                                  showSnackBar('Room does not exist.')
+                                  : value.value['player']['player2']['username'] != null || value.value['player']['player1']['uid'] == userModel.uid ?
+                                    showSnackBar('Can\'t join this room.')
+                                    : Get.to(JoinGameBoard(uid: userModel.uid, username: userModel.username, roomId: int.parse(roomIdController.text)))
+
                               });
           
                             },
@@ -81,49 +88,75 @@ class Home extends GetWidget<AuthController> {
               SizedBox(height: 24.0),
               Expanded(
                 child: NotificationListener<OverscrollIndicatorNotification>(
+                  // ignore: missing_return
                   onNotification: (overscroll) {
                     overscroll.disallowGlow();
                   },
-                  child: ListView.builder(
-                    itemCount: 1,
-                    itemBuilder: (context, index) {
-                      return Material(
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(5.0),
-                          child: Container(
-                            margin: EdgeInsets.only(bottom: 12.0),
-                            color: Color(0xfff5f5f5),
-                            child: InkWell(
-                              onTap: () {
-                              
-                              },
-                              child: Row(
-                                children: [
-                                  Container(
-                                    width: 60.0,
-                                    height: 60.0,
-                                    margin: EdgeInsets.only(right: 12.0),
-                                    child: Center(child: Text('$index', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),)),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5.0),
-                                      color: Colors.blue
+                  child: StreamBuilder(
+                    stream: database.child('RoomList').onValue,
+                    builder: (context, snapshot) {
+                
+                      if(snapshot.hasData) {
+
+                        Map<dynamic, dynamic> roomList = snapshot.data.snapshot.value;
+                        List roomKeys = [];
+                        
+                        if(roomList != null) roomList.forEach((key, value) {
+
+                          roomKeys.add(key);
+
+                        });
+
+                        return snapshot.data.snapshot.value == null ? SizedBox() : ListView.builder(
+                          itemCount: snapshot.data.snapshot.value.length == null ? 0 : snapshot.data.snapshot.value.length,
+                          itemBuilder: (context, index) {
+                            return Material(
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(5.0),
+                                child: Container(
+                                  margin: EdgeInsets.only(bottom: 12.0),
+                                  color: Color(0xfff5f5f5),
+                                  child: InkWell(
+                                    onTap: () {
+                                      
+                                      roomList[roomKeys[index]]['roomOwner'] == userModel.uid ?
+                                      showSnackBar('Can\'t join this room.')
+                                      : Get.to(JoinGameBoard(uid: userModel.uid, username: userModel.username, roomId: int.parse(roomKeys[index])));
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Container(
+                                          width: 60.0,
+                                          height: 60.0,
+                                          margin: EdgeInsets.only(right: 12.0),
+                                          child: Center(child: Text('$index', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),)),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(5.0),
+                                            color: Colors.blue
+                                          ),
+                                        ),
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text('${roomList[roomKeys[index]]['roomName']}', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                                            SizedBox(height: 5.0,),
+                                            Text('ID: ${roomKeys[index]}', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w300),),
+                                          ],
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text('Room $index', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
-                                      SizedBox(height: 5.0,),
-                                      Text('ID: 78634235', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w300),),
-                                    ],
-                                  ),
-                                ],
+                                ),
                               ),
-                            ),
-                          ),
-                        ),
-                      );
-                    },
+                            );
+                          },
+                        );
+
+                      }
+
+                      return Container();
+
+                    }
                   ),
                 ),
               )

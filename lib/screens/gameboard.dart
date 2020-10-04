@@ -83,12 +83,15 @@ class _GameBoardState extends State<GameBoard> {
                         ],
                       ),
                       Spacer(),
-                      Column(
-                        children: [
-                          Image.asset('assets/images/icons8-circle-96.png', scale: 2.0,),
-                          SizedBox(height: 15.0),
-                          Text(players['player2']['username'] == null ? 'NULL' : players['player2']['username'], style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold),)
-                        ],
+                      Opacity(
+                        opacity: players['player2']['username'] == null ? 0.5 : 1,
+                        child: Column(
+                          children: [
+                            Image.asset('assets/images/icons8-circle-96.png', scale: 2.0,),
+                            SizedBox(height: 15.0),
+                            Text(players['player2']['username'] == null ? 'NULL' : players['player2']['username'], style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold),)
+                          ],
+                        ),
                       )
                     ],
                   );

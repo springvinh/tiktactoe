@@ -20,7 +20,9 @@ class GameController extends GetxController {
             });
 
     try {
+
       final database = FirebaseDatabase.instance.reference();
+
       database.child('Room/$roomId').set({
         'player': {
           'player1': {'uid': uid, 'username': username, 'score': 0},
@@ -31,6 +33,13 @@ class GameController extends GetxController {
         'switchTurn': 0,
         'isPlaying': false
       });
+
+      database.child('RoomList/$roomId').set({
+          'roomName': 'Room $username',
+          'roomOwner': uid,
+          'roomID': int.parse('$roomId')
+      });
+
     } catch (error) {
       Get.back();
       showSnackBar(error.message);
@@ -49,6 +58,8 @@ class GameController extends GetxController {
           'isPlaying': true
         })
       });
+
+      database.child('RoomList/$joinId').remove();
 
     } catch(error) {
       Get.back();
